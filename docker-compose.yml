@@ -5,12 +5,18 @@ services:
       - .:/app
     working_dir: /app
     command: sleep infinity
+    depends_on: 
+      - db
+      - redis
   worker:
     build: .
     volumes:
       - .:/app
     working_dir: /app
     command: watchexec -e py -r "celery -A tasks worker --loglevel=INFO"
+    depends_on: 
+      - db
+      - redis
   db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
